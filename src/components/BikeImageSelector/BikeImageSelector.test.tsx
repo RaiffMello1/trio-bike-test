@@ -3,8 +3,9 @@ import { mockedImageUrls } from 'mocks/Bike'
 import BikeImageSelector from '.'
 
 describe('BikeImageSelector component', () => {
+  const handleSelectedUrl = jest.fn()
   beforeEach(() => {
-    render(<BikeImageSelector imageUrls={mockedImageUrls} />)
+    render(<BikeImageSelector imageUrls={mockedImageUrls} handleSelectedUrl={handleSelectedUrl}/>)
   })
 
   it('should has an images list to select', () => {

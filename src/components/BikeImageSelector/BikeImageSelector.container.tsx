@@ -3,9 +3,10 @@ import BikeImageSelector from './BikeImageSelector.component'
 
 interface BikeImageSelectorProps {
   imageUrls: string[]
+  handleSelectedUrl: (imageUrl: string) => void
 }
 
-const BikeImageSelectorContainer = ({ imageUrls }: BikeImageSelectorProps) => {
+const BikeImageSelectorContainer = ({ imageUrls, handleSelectedUrl }: BikeImageSelectorProps) => {
   const [selectedImageUrl, setSelectedImageUrl] = useState(imageUrls[0])
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
   const [isImageLoaded, setIsImageLoaded] = useState(false)
@@ -13,6 +14,7 @@ const BikeImageSelectorContainer = ({ imageUrls }: BikeImageSelectorProps) => {
   const handleSelectImage = (imageUrl: string, index: number) => {
     setSelectedImageUrl(imageUrl)
     setSelectedImageIndex(index)
+    handleSelectedUrl(imageUrl)
   }
 
   const handleIsImageLoaded = (isLoading: boolean) => {
