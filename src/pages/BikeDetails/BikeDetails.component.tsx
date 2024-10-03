@@ -24,6 +24,8 @@ import { useEffect, useState } from 'react';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import {BOILERPLATE_USER_ID} from 'config'
 import { amount, rent } from 'services/bike'
+import '@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css';
+import 'react-calendar/dist/Calendar.css';
 
 interface BikeDetailsProps {
   bike?: Bike
@@ -50,24 +52,28 @@ const BikeDetails = ({ bike }: BikeDetailsProps) => {
   const [totalAmmount, setTotalAmmount] = useState<number>(0)
   const [rentted, setRentted] = useState<boolean>(false)
   const [selecterUrl, setSelectedUrl] = useState<string | undefined>(bike?.imageUrls[0])
-
+  
   useEffect(() =>{
-    const dataSplitted = value?.toString().split(',')
-    const dateStart = new Date(dataSplitted![0])
-    const dateEnd = new Date(dataSplitted![1])
+    if(value){
+      const dataSplitted = value?.toString().split(',')
+      const dateStart = new Date(dataSplitted![0])
+      const dateEnd = new Date(dataSplitted![1])
+  
+      setDateFrom(`${dateStart.getFullYear()}-${dateStart.getUTCMonth()}-${dateStart.getDate()}`)
+      setDateTo(`${dateEnd.getFullYear()}-${dateEnd.getMonth()}-${dateEnd.getDate()}`)
 
-    setDateFrom(`${dateStart.getFullYear()}-${dateStart.getUTCMonth()}-${dateStart.getDate()}`)
-    setDateTo(`${dateEnd.getFullYear()}-${dateEnd.getMonth()}-${dateEnd.getDate()}`)
+      // even sending the correct date the API ist returning 400 - {"errorType":"InvalidDatesError","message":"Invalid dates."}
+      const result = amount({
+        bikeId: bike?.id ?? 0,
+        userId: parseInt(BOILERPLATE_USER_ID),
+        dateFrom: `${dateStart.getFullYear()}-${dateStart.getUTCMonth()}-${dateStart.getDate()}`,
+        dateTo: `${dateEnd.getFullYear()}-${dateEnd.getMonth()}-${dateEnd.getDate()}`
+      })
+      setRentAmmount(result.rentAmount)
+      setFee(result.fee)
+      setTotalAmmount(result.totalAmount)
+    }
     
-    const result = amount({
-      bikeId: bike?.id ?? 0,
-      userId: parseInt(BOILERPLATE_USER_ID),
-      dateFrom: `${dateStart.getFullYear()}-${dateStart.getUTCMonth()}-${dateStart.getDate()}`,
-      dateTo: `${dateEnd.getFullYear()}-${dateEnd.getMonth()}-${dateEnd.getDate()}`
-    })
-    setRentAmmount(result.rentAmount)
-    setFee(result.fee)
-    setTotalAmmount(result.totalAmount)
     
   }, [value])
 
