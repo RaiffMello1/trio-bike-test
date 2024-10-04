@@ -20,45 +20,34 @@ const config = {
     }
 }
 
-export const amount = (payload: PayloadRent): AmountSuccess => {
-    let rsp = {
-        rentAmount: 0,
-        fee: 0,
-        totalAmount: 0
-    }
-
-    apiClient.post('https://trio-bike-rent-api.herokuapp.com/api/bikes/amount', {
+export const amount = (payload: PayloadRent): Promise<AmountSuccess> => {
+    return apiClient.post('https://trio-bike-rent-api.herokuapp.com/api/bikes/amount', {
         bikeId: payload.bikeId,
         userId: payload.userId,
         dateFrom: payload.dateFrom,
         dateTo: payload.dateTo
-      }, config).then(data =>{
-        rsp =  {
+    }, config).then(data => {
+        return {
             rentAmount: data.data.rentAmount,
             fee: data.data.fee,
             totalAmount: data.data.totalAmount
         }
-      })
-    return rsp
+    })
 }
 
 interface RentSuccess{
     rentted: boolean
 }
 
-export const rent = (payload: PayloadRent): RentSuccess => {
-    let rsp = {
-        rentted: false
-    }
-     apiClient.post('https://trio-bike-rent-api.herokuapp.com/api/bikes/rent', {
+export const rent = (payload: PayloadRent): Promise<RentSuccess> => {
+     return apiClient.post('https://trio-bike-rent-api.herokuapp.com/api/bikes/rent', {
         bikeId: payload.bikeId,
         userId: payload.userId,
         dateFrom: payload.dateFrom,
         dateTo: payload.dateTo
       }, config).then(data =>{
-        rsp =  {
+        return  {
             rentted: true
         }
       })
-    return rsp
 }

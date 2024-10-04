@@ -5,6 +5,7 @@ import { SERVICE_FEE_PERCENTAGE } from './BikeDetails.contants'
 import { getServicesFee } from './BikeDetails.utils'
 import BikeDetails from './BikeDetails.component'
 
+
 describe('BikeDetails page', () => {
   beforeEach(() => {
     render(
