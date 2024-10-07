@@ -37,7 +37,7 @@ export const amount = (payload: PayloadRent): Promise<AmountSuccess> => {
 
 interface RentSuccess{
     msg: string
-    rentted: boolean
+    rented: boolean
 }
 
 export const rent = (payload: PayloadRent): Promise<RentSuccess> => {
@@ -48,13 +48,13 @@ export const rent = (payload: PayloadRent): Promise<RentSuccess> => {
         dateTo: payload.dateTo
       }, config).then(() =>{
         return  {
-            rentted: true,
+            rented: true,
             msg: ''
         }
       }).catch(err => {
         console.log(err.response.data.message)
         return {
-            rentted: false,
+            rented: false,
             msg: err.response.data.message
         }
       })

@@ -18,7 +18,7 @@ import {
 } from './BikeDetails.styles'
 
 import {  useState } from 'react';
-import BikeRentted from './BikeRentted/BikeRentted'
+import BikeRented from './BikeRented/BikeRented'
 import RentPicker from './RentPicker/RentPicker'
 
 interface BikeDetailsProps {
@@ -32,7 +32,7 @@ const BikeDetails = ({ bike }: BikeDetailsProps) => {
   const servicesFee = getServicesFee(rateByDay)
   const total = rateByDay + servicesFee
 
-  const [rentted, setRentted] = useState<boolean>(false)
+  const [rented, setRented] = useState<boolean>(false)
   const [selectedUrl, setSelectedUrl] = useState<string | undefined>(bike?.imageUrls[0])
   
   function handleSelectedUrl(selectedUrl: string){
@@ -111,15 +111,15 @@ const BikeDetails = ({ bike }: BikeDetailsProps) => {
           </Box>
         </DetailsContainer>
 
-        { rentted ? 
+        { !rented ? 
           <RentPicker 
             rateByDay={rateByDay}
             servicesFee={servicesFee}
             total={total}
             bikeId={bike?.id ?? 0}
-            setRentted={setRentted} />
+            setRented={setRented} />
           : 
-          <BikeRentted
+          <BikeRented
             bikeName={bike?.name}
             selectedUrl={selectedUrl ?? bike?.imageUrls[0]} 
             bikeType={bike?.type}

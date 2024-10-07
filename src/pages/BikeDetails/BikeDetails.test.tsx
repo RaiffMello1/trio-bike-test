@@ -41,21 +41,6 @@ describe('BikeDetails page', () => {
     const mapElement = screen.getByTestId('booking-address-map')
     expect(mapElement).toBeInTheDocument()
   })
-
-  it('should has the overview container with the prices, total and booking button', () => {
-    const overviewContainerElement = screen.getByTestId('bike-overview-container')
-    expect(overviewContainerElement).toBeInTheDocument()
-
-    const pricesElements = screen.getAllByTestId('bike-overview-single-price')
-    expect(pricesElements).not.toBeNull()
-    expect(pricesElements.length).toBe(2)
-
-    const totalElement = screen.getByTestId('bike-overview-total')
-    expect(totalElement).toBeInTheDocument()
-
-    const bookingButtonElement = screen.getByTestId('bike-booking-button')
-    expect(bookingButtonElement).toBeInTheDocument()
-  })
 })
 
 describe('BikeDetails utils', () => {

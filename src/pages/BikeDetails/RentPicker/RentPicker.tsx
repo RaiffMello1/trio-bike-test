@@ -13,7 +13,7 @@ interface RentProps {
     servicesFee: number
     total: number
     bikeId: number
-    setRentted: (rent: boolean) => void
+    setRented: (rent: boolean) => void
 
 }
 
@@ -21,7 +21,7 @@ type ValuePiece = Date | null;
 
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
-const Rent = ({ rateByDay, servicesFee, total, bikeId, setRentted }: RentProps) => {
+const Rent = ({ rateByDay, servicesFee, total, bikeId, setRented }: RentProps) => {
 
   const [value, handleSelect] = useState<Value>([new Date(), new Date()]);
 
@@ -75,7 +75,7 @@ const Rent = ({ rateByDay, servicesFee, total, bikeId, setRentted }: RentProps) 
       dateTo: dateTo
     }).then((data) => {
         console.log(data)
-        if(data.rentted) setRentted(data.rentted)
+        if(data.rented) setRented(data.rented)
         else alert(data.msg)
     })
   }
@@ -93,16 +93,15 @@ const Rent = ({ rateByDay, servicesFee, total, bikeId, setRentted }: RentProps) 
 
           <Divider />
 
-          <PriceRow marginTop={1.75} data-testid='bike-overview-single-price'>
-            <Box display='flex' alignItems='center'>
+          <PriceRow marginTop={1.75} >
+            <Box display='flex' alignItems='center' data-testid='bike-rent-ammount'>
               <Typography marginRight={1}>Subtotal</Typography>
               <InfoIcon fontSize='small' />
             </Box>
-
             <Typography>{rentAmmount > 0 ? rentAmmount : rateByDay} €</Typography>
           </PriceRow>
 
-          <PriceRow marginTop={1.5} data-testid='bike-overview-single-price'>
+          <PriceRow marginTop={1.5} data-testid='bike-fee'>
             <Box display='flex' alignItems='center'>
               <Typography marginRight={1}>Service Fee</Typography>
               <InfoIcon fontSize='small' />
@@ -111,7 +110,7 @@ const Rent = ({ rateByDay, servicesFee, total, bikeId, setRentted }: RentProps) 
             <Typography>{fee > 0 ? fee : servicesFee} €</Typography>
           </PriceRow>
 
-          <PriceRow marginTop={1.75} data-testid='bike-overview-total'>
+          <PriceRow marginTop={1.75} data-testid='bike-total'>
             <Typography fontWeight={800} fontSize={16}>
               Total
             </Typography>
