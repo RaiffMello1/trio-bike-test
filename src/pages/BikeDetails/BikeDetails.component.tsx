@@ -33,10 +33,10 @@ const BikeDetails = ({ bike }: BikeDetailsProps) => {
   const total = rateByDay + servicesFee
 
   const [rentted, setRentted] = useState<boolean>(false)
-  const [selecterUrl, setSelectedUrl] = useState<string | undefined>(bike?.imageUrls[0])
+  const [selectedUrl, setSelectedUrl] = useState<string | undefined>(bike?.imageUrls[0])
   
-  function handleSelectedUrl(selecterUrl: string){
-    setSelectedUrl(selecterUrl)
+  function handleSelectedUrl(selectedUrl: string){
+    setSelectedUrl(selectedUrl)
   }
 
   return (
@@ -111,7 +111,7 @@ const BikeDetails = ({ bike }: BikeDetailsProps) => {
           </Box>
         </DetailsContainer>
 
-        { !rentted ? 
+        { rentted ? 
           <RentPicker 
             rateByDay={rateByDay}
             servicesFee={servicesFee}
@@ -121,7 +121,11 @@ const BikeDetails = ({ bike }: BikeDetailsProps) => {
           : 
           <BikeRentted
             bikeName={bike?.name}
-            selecterUrl={selecterUrl} />}
+            selectedUrl={selectedUrl ?? bike?.imageUrls[0]} 
+            bikeType={bike?.type}
+          />
+        }
+
       </Content>
     </div>
   )

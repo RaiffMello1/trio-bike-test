@@ -60,29 +60,24 @@ const Rent = ({ rateByDay, servicesFee, total, bikeId, setRentted }: RentProps) 
               })
             
         } catch (error) {
-          'catch'
-        } finally {
-         'finally'
+          console.log(error)
         }
       };
-
       fetchData()
-      
     }
-    
-    
   }, [value])
 
   const  handleBooking = async () => {
-    const result = await rent({
+    await rent({
       bikeId: bikeId,
       userId: parseInt(BOILERPLATE_USER_ID),
       dateFrom: dateFrom,
       dateTo: dateTo
     }).then((data) => {
-        setRentted(data.rentted)
+        console.log(data)
+        if(data.rentted) setRentted(data.rentted)
+        else alert(data.msg)
     })
-    
   }
 
 
