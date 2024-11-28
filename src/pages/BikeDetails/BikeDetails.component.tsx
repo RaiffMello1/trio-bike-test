@@ -7,18 +7,19 @@ import Header from 'components/Header'
 import Bike from 'models/Bike'
 import { getServicesFee } from './BikeDetails.utils'
 import {
-  BookingButton,
   BreadcrumbContainer,
   BreadcrumbHome,
   BreadcrumbSeparator,
   Content,
   DetailsContainer,
   FavoriteIcon,
-  InfoIcon,
   LikeButton,
-  OverviewContainer,
   PriceRow,
 } from './BikeDetails.styles'
+
+import {  useState } from 'react';
+import BikeRented from './BikeRented/BikeRented'
+import RentPicker from './RentPicker/RentPicker'
 
 interface BikeDetailsProps {
   bike?: Bike
@@ -31,10 +32,16 @@ const BikeDetails = ({ bike }: BikeDetailsProps) => {
   const servicesFee = getServicesFee(rateByDay)
   const total = rateByDay + servicesFee
 
+  const [rented, setRented] = useState<boolean>(false)
+  const [selectedUrl, setSelectedUrl] = useState<string | undefined>(bike?.imageUrls[0])
+  
+  function handleSelectedUrl(selectedUrl: string){
+    setSelectedUrl(selectedUrl)
+  }
+
   return (
     <div data-testid='bike-details-page'>
       <Header />
-
       <BreadcrumbContainer data-testid='bike-details-breadcrumbs'>
         <Breadcrumbs separator={<BreadcrumbSeparator />}>
           <Link underline='hover' display='flex' alignItems='center' color='white' href='/'>
@@ -46,15 +53,11 @@ const BikeDetails = ({ bike }: BikeDetailsProps) => {
           </Typography>
         </Breadcrumbs>
       </BreadcrumbContainer>
-
       <Content>
         <DetailsContainer variant='outlined' data-testid='bike-details-container'>
-          {!!bike?.imageUrls && <BikeImageSelector imageUrls={bike.imageUrls} />}
-
+        {!!bike?.imageUrls && <BikeImageSelector imageUrls={bike.imageUrls} handleSelectedUrl={handleSelectedUrl}/>}
           <BikeSpecs bodySize={bike?.bodySize} maxLoad={bike?.maxLoad} ratings={bike?.ratings} />
-
           <Divider />
-
           <Box marginY={2.25}>
             <Box display='flex' alignItems='center' justifyContent='space-between'>
               <div>
@@ -80,9 +83,7 @@ const BikeDetails = ({ bike }: BikeDetailsProps) => {
               {bike?.description}
             </Typography>
           </Box>
-
           <Divider />
-
           <Box marginY={2.25} data-testid='bike-prices-details'>
             <PriceRow>
               <Typography>Day</Typography>
@@ -110,49 +111,21 @@ const BikeDetails = ({ bike }: BikeDetailsProps) => {
           </Box>
         </DetailsContainer>
 
-        <OverviewContainer variant='outlined' data-testid='bike-overview-container'>
-          <Typography variant='h2' fontSize={16} marginBottom={1.25}>
-            Booking Overview
-          </Typography>
+        { !rented ? 
+          <RentPicker 
+            rateByDay={rateByDay}
+            servicesFee={servicesFee}
+            total={total}
+            bikeId={bike?.id ?? 0}
+            setRented={setRented} />
+          : 
+          <BikeRented
+            bikeName={bike?.name}
+            selectedUrl={selectedUrl ?? bike?.imageUrls[0]} 
+            bikeType={bike?.type}
+          />
+        }
 
-          <Divider />
-
-          <PriceRow marginTop={1.75} data-testid='bike-overview-single-price'>
-            <Box display='flex' alignItems='center'>
-              <Typography marginRight={1}>Subtotal</Typography>
-              <InfoIcon fontSize='small' />
-            </Box>
-
-            <Typography>{rateByDay} €</Typography>
-          </PriceRow>
-
-          <PriceRow marginTop={1.5} data-testid='bike-overview-single-price'>
-            <Box display='flex' alignItems='center'>
-              <Typography marginRight={1}>Service Fee</Typography>
-              <InfoIcon fontSize='small' />
-            </Box>
-
-            <Typography>{servicesFee} €</Typography>
-          </PriceRow>
-
-          <PriceRow marginTop={1.75} data-testid='bike-overview-total'>
-            <Typography fontWeight={800} fontSize={16}>
-              Total
-            </Typography>
-            <Typography variant='h2' fontSize={24} letterSpacing={1}>
-              {total} €
-            </Typography>
-          </PriceRow>
-
-          <BookingButton
-            fullWidth
-            disableElevation
-            variant='contained'
-            data-testid='bike-booking-button'
-          >
-            Add to booking
-          </BookingButton>
-        </OverviewContainer>
       </Content>
     </div>
   )
